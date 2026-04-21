@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GoodHamburgerProject.Migrations
 {
     /// <inheritdoc />
-    public partial class inital : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -99,7 +99,7 @@ namespace GoodHamburgerProject.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     OrderId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AccompanimentId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProductType = table.Column<int>(type: "INTEGER", nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
                     Active = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
@@ -190,9 +190,9 @@ namespace GoodHamburgerProject.Migrations
                 column: "Active");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId_AccompanimentId",
+                name: "IX_OrderItems_OrderId_ProductId",
                 table: "OrderItems",
-                columns: new[] { "OrderId", "AccompanimentId" },
+                columns: new[] { "OrderId", "ProductId" },
                 unique: true);
         }
 

@@ -11,6 +11,6 @@ namespace GoodHamburgerProject.DTOs
     {
         public ProductTypeEnum ProductType { get; set; }
 
-        public Guid AccompanimentId { get; set; }
+        public Guid ProductId { get; set; }
     }
 }

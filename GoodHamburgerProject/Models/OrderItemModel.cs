@@ -9,7 +9,7 @@ namespace GoodHamburgerProject.Models
         public Guid OrderId { get; set; }
         public OrderModel Order { get; set; } = null!;
 
-        public Guid AccompanimentId { get; set; }
+        public Guid ProductId { get; set; }
 
         public ProductTypeEnum ProductType { get; set; }
 

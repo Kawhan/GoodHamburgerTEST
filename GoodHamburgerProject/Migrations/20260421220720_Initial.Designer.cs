@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoodHamburgerProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260421211109_inital")]
-    partial class inital
+    [Migration("20260421220720_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -394,9 +394,6 @@ namespace GoodHamburgerProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("AccompanimentId")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -409,12 +406,15 @@ namespace GoodHamburgerProject.Migrations
                         .HasPrecision(10, 2)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ProductType")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId", "AccompanimentId")
+                    b.HasIndex("OrderId", "ProductId")
                         .IsUnique();
 
                     b.ToTable("OrderItems", (string)null);

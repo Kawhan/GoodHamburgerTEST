@@ -8,5 +8,7 @@ namespace GoodHamburgerProject.Repositories
         Task<List<OrderModel>> GetAllOrdersAsync();
         Task<OrderModel?> GetOrderByIdAsync(Guid id);
         Task<bool> DeleteOrderAsync(Guid id);
+
+        Task<bool> UpdateOrderAsync(OrderModel order);
     }
 }

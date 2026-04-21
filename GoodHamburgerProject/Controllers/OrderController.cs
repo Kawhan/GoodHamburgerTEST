@@ -1,4 +1,5 @@
 ﻿using GoodHamburgerProject.DTOs;
+using GoodHamburgerProject.Exceptions;
 using GoodHamburgerProject.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,13 @@ namespace GoodHamburgerProject.Controllers
         {
             var deleted = await orderService.DeleteOrderAsync(id);
             return deleted ? NoContent() : NotFound("No Orders ware found with that ID.");
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<OrderResponseDTO>> UpdateOrder(Guid id, UpdateOrderRequestDTO request)
+        {
+            var updated = await orderService.UpdateOrderAsync(id, request);
+            return updated ? NoContent() : NotFound("No Orders were found with that ID.");
         }
     }
 }

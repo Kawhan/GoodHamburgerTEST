@@ -48,5 +48,20 @@ namespace GoodHamburgerProject.Repositories
 
             return true;
         }
+
+        public async Task<bool> UpdateOrderAsync(OrderModel order)
+        {
+            try
+            {
+                context.Orders.Update(order);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message);
+            }
+        }
     }
 }

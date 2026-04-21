@@ -71,6 +71,25 @@ namespace GoodHamburgerProject.Services
             return await repository.DeleteOrderAsync(id);
         }
 
+        public async Task<bool> UpdateOrderAsync(Guid id, UpdateOrderRequestDTO request)
+        {
+            var order = await GetOrderOrThrow(id);
+
+            ValidateItems(request.Items);
+
+            var currentItems = GetActiveItems(order);
+
+            RemoveItems(order, currentItems, request.Items);
+
+            await AddNewItems(order, currentItems, request.Items);
+
+            await RecalculateOrder(order);
+
+            var result = await SaveOrder(order);
+
+            return result;
+        }
+
         #region Aux Methods
 
         private void ValidateItems(List<OrderItemRequestDTO> items)
@@ -81,7 +100,7 @@ namespace GoodHamburgerProject.Services
                 throw new BurgersLimitException();
 
             var duplicatedProducts = items
-                .GroupBy(i => i.AccompanimentId)
+                .GroupBy(i => i.ProductId)
                 .Where(g => g.Count() > 1)
                 .Any();
 
@@ -95,7 +114,7 @@ namespace GoodHamburgerProject.Services
 
             return new OrderItemModel
             {
-                AccompanimentId = item.AccompanimentId,
+                ProductId = item.ProductId,
                 ProductType = item.ProductType,
                 Price = price
             };
@@ -105,8 +124,8 @@ namespace GoodHamburgerProject.Services
         {
             return item.ProductType switch
             {
-                ProductTypeEnum.Burger => await GetBurgerPriceAsync(item.AccompanimentId),
-                ProductTypeEnum.Accompaniment => await GetAccompanimentPriceAsync(item.AccompanimentId),
+                ProductTypeEnum.Burger => await GetBurgerPriceAsync(item.ProductId),
+                ProductTypeEnum.Accompaniment => await GetAccompanimentPriceAsync(item.ProductId),
                 _ => throw new InvalidOrderItemTypeException()
             };
         }
@@ -135,7 +154,7 @@ namespace GoodHamburgerProject.Services
 
         private void CalculateTotalAmount(OrderModel order)
         {
-            order.TotalAmount = order.Items.Sum(i => i.Price);
+            order.TotalAmount = order.Items.Where(i => i.Active).Sum(i => i.Price);
         }
 
 
@@ -144,7 +163,150 @@ namespace GoodHamburgerProject.Services
             var discounts = await discountRepository.GetActiveDiscountsAsync();
 
             var orderProductIds = order.Items
-                .Select(i => i.AccompanimentId)
+                .Select(i => i.ProductId)
+                .ToList();
+
+            decimal bestDiscount = 0;
+
+            foreach (var discount in discounts)
+            {
+                var discountProductIds = discount.Items
+                    .Select(i => i.ProductId)
+                    .ToList();
+
+                var isMatch = discountProductIds.All(id => orderProductIds.Contains(id));
+
+                if (isMatch && discount.Percentage > bestDiscount)
+                {
+                    bestDiscount = discount.Percentage;
+                }
+            }
+
+            order.Discount = order.TotalAmount * bestDiscount;
+            order.FinalAmount = order.TotalAmount - order.Discount;
+        }
+
+        private async Task<OrderModel> GetOrderOrThrow(Guid id)
+        {
+            var order = await repository.GetOrderByIdAsync(id);
+
+            if (order is null)
+                throw new OrderNotFoundException();
+
+            return order;
+        }
+
+        private static List<OrderItemModel> GetActiveItems(OrderModel order)
+        {
+            return order.Items
+                .Where(i => i.Active)
+                .ToList();
+        }
+
+        private static void RemoveItems(
+            OrderModel order,
+            List<OrderItemModel> currentItems,
+            List<OrderItemRequestDTO> requestItems)
+        {
+            foreach (var existing in currentItems)
+            {
+                var existsInRequest = requestItems.Any(r =>
+                    r.ProductId == existing.ProductId &&
+                    r.ProductType == existing.ProductType);
+
+                if (!existsInRequest)
+                {
+                    existing.Active = false;
+                }
+            }
+        }
+
+        private async Task AddNewItems(
+            OrderModel order,
+            List<OrderItemModel> currentItems,
+            List<OrderItemRequestDTO> requestItems)
+        {
+            foreach (var incoming in requestItems)
+            {
+                var existingItem = order.Items.FirstOrDefault(i =>
+                    i.ProductId == incoming.ProductId &&
+                    i.ProductType == incoming.ProductType);
+
+                if (existingItem != null)
+                {
+                    existingItem.Active = true;
+                    continue;
+                }
+
+                var newItem = await CreateOrderItemAsync(incoming, order.Id);
+                order.Items.Add(newItem);
+            }
+        }
+
+        private async Task RecalculateOrder(OrderModel order)
+        {
+            CalculateTotalAmount(order);
+            await ApplyDiscountUpdateAsync(order);
+        }
+
+        private async Task<bool> SaveOrder(OrderModel order)
+        {
+            var updated = await repository.UpdateOrderAsync(order);
+
+            if (!updated)
+                throw new InvalidOperationException("Error updating order");
+
+            return updated;
+        }
+
+        private async Task<OrderItemModel> CreateOrderItemAsync(
+            OrderItemRequestDTO item,
+            Guid orderId)
+        {
+            decimal price = item.ProductType switch
+            {
+                ProductTypeEnum.Burger => await GetBurgerPrice(item.ProductId),
+                ProductTypeEnum.Accompaniment => await GetAccompanimentPrice(item.ProductId),
+                _ => throw new InvalidOrderItemTypeException()
+            };
+
+            return new OrderItemModel
+            {
+                OrderId = orderId,
+                ProductId = item.ProductId,
+                ProductType = item.ProductType,
+                Price = price,
+                Active = true
+            };
+        }
+
+        private async Task<decimal> GetBurgerPrice(Guid id)
+        {
+            var burger = await context.Burgers.FirstOrDefaultAsync(b => b.Id == id);
+
+            if (burger is null)
+                throw new BurgerNotFound();
+
+            return burger.Price;
+        }
+
+        private async Task<decimal> GetAccompanimentPrice(Guid id)
+        {
+            var accompaniment = await context.Accompaniments.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (accompaniment is null)
+                throw new AccompanimentNotFound();
+
+            return accompaniment.Price;
+        }
+
+        private async Task ApplyDiscountUpdateAsync(OrderModel order)
+        {
+            var discounts = await discountRepository.GetActiveDiscountsAsync();
+
+            var orderProductIds = order.Items
+                .Where(i => i.Active)
+                .Select(i => i.ProductId)
                 .ToList();
 
             decimal bestDiscount = 0;

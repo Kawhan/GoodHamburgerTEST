@@ -22,7 +22,7 @@ namespace GoodHamburgerProject.Mappers
                 if (item.ProductType == ProductTypeEnum.Burger)
                 {
                     var burger = await context.Burgers
-                        .FirstOrDefaultAsync(b => b.Id == item.AccompanimentId);
+                        .FirstOrDefaultAsync(b => b.Id == item.ProductId);
 
                     if (burger != null)
                     {
@@ -33,7 +33,7 @@ namespace GoodHamburgerProject.Mappers
                 else
                 {
                     var accompaniment = await context.Accompaniments
-                        .FirstOrDefaultAsync(a => a.Id == item.AccompanimentId);
+                        .FirstOrDefaultAsync(a => a.Id == item.ProductId);
 
                     if (accompaniment != null)
                     {
@@ -46,7 +46,7 @@ namespace GoodHamburgerProject.Mappers
                 {
                     Id = item.Id,
                     ProductType = item.ProductType,
-                    ProductId = item.AccompanimentId,
+                    ProductId = item.ProductId,
                     Name = name,
                     Price = item.Price,
                     Active = item.Active 

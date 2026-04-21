@@ -55,6 +55,11 @@ public class ExceptionMiddleware
             context.Response.StatusCode = 404;
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
+        catch (UpdateOrderException ex)
+        {
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
         catch (InvalidOperationException ex)
         {
             context.Response.StatusCode = 500;

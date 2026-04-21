@@ -13,14 +13,14 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItemModel>
         builder.Property(i => i.ProductType)
             .IsRequired();
 
-        builder.Property(i => i.AccompanimentId)
+        builder.Property(i => i.ProductId)
             .IsRequired();
 
         builder.Property(i => i.Price)
             .IsRequired()
             .HasPrecision(10, 2);
 
-        builder.HasIndex(i => new { i.OrderId, i.AccompanimentId })
+        builder.HasIndex(i => new { i.OrderId, i.ProductId })
             .IsUnique();
 
         builder.Property(i => i.Active)
