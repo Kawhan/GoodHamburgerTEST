@@ -20,6 +20,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IBurgerService, BurgerService>();
 builder.Services.AddScoped<IBurgerRepository, BurgerRepository>();
 
+builder.Services.AddScoped<IAccompanimentService, AccompanimentService>();
+builder.Services.AddScoped<IAccompanimentRepository, AccompanimentRepository>();
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();

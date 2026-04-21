@@ -3,11 +3,11 @@ using GoodHamburgerProject.Models;
 
 namespace GoodHamburgerProject.Mappers
 {
-    public static class BurgerMapper
+    public static class AccompanimentMapper
     {
-        public static BurgerResponseDTO ToDTO(this BurgerModel model)
+        public static AccompanimentResponseDTO ToDTO(this AccompanimentModel model)
         {
-            return new BurgerResponseDTO
+            return new AccompanimentResponseDTO
             {
                 Id = model.Id,
                 Name = model.Name,

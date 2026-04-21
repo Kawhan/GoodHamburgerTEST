@@ -1,5 +1,5 @@
 ﻿using GoodHamburgerProject.Data;
-using GoodHamburgerProject.DTOs;
+using GoodHamburgerProject.Exceptions;
 using GoodHamburgerProject.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +23,7 @@ namespace GoodHamburgerProject.Repositories
         public async Task<bool> DeleteBurgerAsync(Guid id)
         {
             var burger = await context.Burgers
-                .Where(b => b.Id == id).FirstOrDefaultAsync();
+                .Where(b => b.Id == id).FirstOrDefaultAsync() ?? throw new BurgerNotFound();
             burger.Active = false;
             await context.SaveChangesAsync();
             return true;
@@ -44,13 +44,22 @@ namespace GoodHamburgerProject.Repositories
             return burger;
         }
 
-        public async Task<bool> GetBurguerByNameAsync(string name)
+        public async Task<bool> CheckBurguerByNameAsync(string name)
         {
             var exists = await context.Burgers
-                .Where(b => b.Name == name)
+                .Where(b => b.Name.ToLower() == name.ToLower() && b.Active)
                 .AnyAsync();
 
             return exists;
+        }
+
+        public async Task<BurgerModel> GetBurguerByNameAsync(string name)
+        {
+            var burger = await context.Burgers
+                .Where(b => b.Name.ToLower() == name.ToLower())
+                .FirstOrDefaultAsync() ?? throw new BurgerNotFound();
+
+            return burger;
         }
 
         public async Task<bool> UpdateBurgerAsync(BurgerModel burger)
@@ -66,5 +75,6 @@ namespace GoodHamburgerProject.Repositories
             }
             
         }
+
     }
 }

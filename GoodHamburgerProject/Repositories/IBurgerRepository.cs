@@ -9,7 +9,9 @@ namespace GoodHamburgerProject.Repositories
 
         Task<BurgerModel?> GetBurguerByIdAsync(Guid id);
 
-        Task<bool> GetBurguerByNameAsync(string name);
+        Task<bool> CheckBurguerByNameAsync(string name);
+
+        Task<BurgerModel> GetBurguerByNameAsync(string name);
 
         Task<BurgerModel> AddBurgerAsync(BurgerModel burger);
 

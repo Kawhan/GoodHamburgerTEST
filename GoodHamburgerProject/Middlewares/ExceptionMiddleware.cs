@@ -15,6 +15,16 @@ public class ExceptionMiddleware
         {
             await _next(context);
         }
+        catch (AccompanimentAlreadyExistsException ex)
+        {
+            context.Response.StatusCode = 409;
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
+        catch (AccompanimentNotFound ex)
+        {
+            context.Response.StatusCode = 404;
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
         catch (BurgerAlreadyExistsException ex)
         {
             context.Response.StatusCode = 409;

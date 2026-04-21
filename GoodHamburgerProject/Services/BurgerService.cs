@@ -1,5 +1,6 @@
 ﻿using GoodHamburgerProject.DTOs;
 using GoodHamburgerProject.Exceptions;
+using GoodHamburgerProject.Mappers;
 using GoodHamburgerProject.Models;
 using GoodHamburgerProject.Repositories;
 
@@ -9,7 +10,7 @@ namespace GoodHamburgerProject.Services
     {
         public async Task<BurgerResponseDTO> AddBurgerAsync(CreateBurgerRequestDTO burger)
         {
-            await verifyCreateBurger(burger);
+            await VerifyCreateBurger(burger);
 
 
             var newBurger = new BurgerModel
@@ -57,12 +58,20 @@ namespace GoodHamburgerProject.Services
 
         public async Task<bool> ExistsBurgerByNameAsync(string name)
         {
+            var result = await burgerRepository.CheckBurguerByNameAsync(name);
+            return result;
+        }
+
+        public async Task<BurgerModel> GetBurgerByNameAsync(string name)
+        {
             var result = await burgerRepository.GetBurguerByNameAsync(name);
             return result;
         }
 
         public async Task<bool> UpdateBurgerAsync(Guid id, UpdateBurgerRequestDTO burger)
         {
+            await VerifyUpdateBurger(burger, id);  
+
             var existsBurger = await burgerRepository.GetBurguerByIdAsync(id);
 
             if (existsBurger is null)
@@ -72,6 +81,7 @@ namespace GoodHamburgerProject.Services
 
             existsBurger.Name = burger.Name;
             existsBurger.Price = burger.Price;
+            existsBurger.Active = burger.Active;
 
             var status = await burgerRepository.UpdateBurgerAsync(existsBurger);
 
@@ -80,11 +90,22 @@ namespace GoodHamburgerProject.Services
 
 
         #region Aux Methods 
-        private async Task verifyCreateBurger(CreateBurgerRequestDTO burger) 
+        private async Task VerifyCreateBurger(CreateBurgerRequestDTO burger) 
         {
-            var result = await burgerRepository.GetBurguerByNameAsync(burger.Name);
+            var result = await ExistsBurgerByNameAsync(burger.Name);
 
             if (result)
+                throw new BurgerAlreadyExistsException();
+        }
+
+        private async Task VerifyUpdateBurger(UpdateBurgerRequestDTO burger, Guid id)
+        {
+            var existsBurgerResults = await GetAllBurgersAsync();
+
+            var existsDuplicateBurger = existsBurgerResults.
+                Where(b => b.Id != id && b.Name.ToLower() == burger.Name.ToLower() && b.Active).Any();
+
+            if (existsDuplicateBurger)
                 throw new BurgerAlreadyExistsException();
         }
 
