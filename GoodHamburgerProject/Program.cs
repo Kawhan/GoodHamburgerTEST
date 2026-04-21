@@ -26,6 +26,8 @@ builder.Services.AddScoped<IAccompanimentRepository, AccompanimentRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
+builder.Services.AddScoped<IMenuService, MenuService>();
+
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 
 var app = builder.Build();
