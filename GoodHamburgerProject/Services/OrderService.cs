@@ -32,7 +32,43 @@ namespace GoodHamburgerProject.Services
 
             var createdOrder = await repository.AddOrderAsync(order);
 
-            return createdOrder.ToDTO();
+            return await createdOrder.ToDTOAsync(context);
+        }
+
+
+        public async Task<List<OrderResponseDTO>> GetAllOrdersAsync()
+        {
+            var orders = await repository.GetAllOrdersAsync();
+
+            var result = new List<OrderResponseDTO>();
+
+            foreach (var order in orders)
+            {
+                var dto = await order.ToDTOAsync(context);
+                result.Add(dto);
+            }
+
+            return result;
+        }
+
+        public async Task<OrderResponseDTO> GetOrderByIdAsync(Guid id)
+        {
+            var order = await repository.GetOrderByIdAsync(id);
+
+            if (order is null)
+                throw new OrderNotFoundException();
+
+            return await order.ToDTOAsync(context);
+        }
+
+        public async Task<bool> DeleteOrderAsync(Guid id)
+        {
+            var order = await repository.GetOrderByIdAsync(id);
+
+            if (order is null)
+                throw new OrderNotFoundException();
+
+            return await repository.DeleteOrderAsync(id);
         }
 
         #region Aux Methods

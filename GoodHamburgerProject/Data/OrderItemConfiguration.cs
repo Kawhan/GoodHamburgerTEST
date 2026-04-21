@@ -26,6 +26,5 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItemModel>
         builder.Property(i => i.Active)
             .HasDefaultValue(true);
 
-        builder.HasQueryFilter(i => i.Active);
     }
 }

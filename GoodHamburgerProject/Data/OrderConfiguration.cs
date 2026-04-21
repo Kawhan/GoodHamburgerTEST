@@ -28,8 +28,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderModel>
         builder.Property(o => o.Active)
             .HasDefaultValue(true);
 
-        builder.HasQueryFilter(o => o.Active);
-
         builder.HasMany(o => o.Items)
             .WithOne(i => i.Order)
             .HasForeignKey(i => i.OrderId)

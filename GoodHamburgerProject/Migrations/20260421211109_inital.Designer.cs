@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoodHamburgerProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260421193121_Initial")]
-    partial class Initial
+    [Migration("20260421211109_inital")]
+    partial class inital
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

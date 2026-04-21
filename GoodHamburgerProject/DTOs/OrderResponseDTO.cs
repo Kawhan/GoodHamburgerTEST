@@ -11,5 +11,10 @@
         public decimal FinalAmount { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public bool Active { get; set; }
+
+        public List<OrderItemResponseDTO> Items { get; set; } = new();
+
     }
 }
