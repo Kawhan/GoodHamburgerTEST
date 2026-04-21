@@ -23,6 +23,11 @@ builder.Services.AddScoped<IBurgerRepository, BurgerRepository>();
 builder.Services.AddScoped<IAccompanimentService, AccompanimentService>();
 builder.Services.AddScoped<IAccompanimentRepository, AccompanimentRepository>();
 
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
