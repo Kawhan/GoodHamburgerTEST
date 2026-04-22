@@ -33,6 +33,17 @@ namespace GoodHamburgerProject.Controllers
             return Ok(burguer);
         }
 
+        /// <summary>
+        /// Creates a new burger in the system.
+        /// </summary>
+        /// <param name="request">Data required to create a new burger</param>
+        /// <returns>The created burger</returns>
+        /// <response code="201">Burger successfully created</response>
+        /// <response code="400">Invalid request data</response>
+        /// <response code="409">Burger already exists</response>
+        [ProducesResponseType(typeof(BurgerResponseDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPost]
         public async Task<ActionResult<BurgerResponseDTO>> AddBurger(CreateBurgerRequestDTO request)
         {
@@ -44,18 +55,41 @@ namespace GoodHamburgerProject.Controllers
             );
         }
 
+        /// <summary>
+        /// Updates an existing burger.
+        /// </summary>
+        /// <param name="id">Burger unique identifier (GUID)</param>
+        /// <param name="request">Data to update the burger</param>
+        /// <returns>No content if the update is successful</returns>
+        /// <response code="204">Burger successfully updated</response>
+        /// <response code="400">Invalid request data</response>
+        /// <response code="404">Burger not found</response>
+        /// <response code="409">Burger with the same name already exists</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPut]
         public async Task<ActionResult> UpdateBurger(Guid id, UpdateBurgerRequestDTO request)
         {
             var updated = await serviceBurger.UpdateBurgerAsync(id, request);
-            return updated ? NoContent() : NotFound("No hamburgers were found with that ID.");
+            return updated ? NoContent() : NotFound("No burgers were found with that ID.");
         }
 
+        /// <summary>
+        /// Deletes an existing burger.
+        /// </summary>
+        /// <param name="id">Burger unique identifier (GUID)</param>
+        /// <returns>No content if the deletion is successful</returns>
+        /// <response code="204">Burger successfully deleted</response>
+        /// <response code="404">Burger not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteBurger(Guid id) 
         { 
             var deleted = await serviceBurger.DeleteBurgerAsync(id);
-            return deleted ? NoContent() : NotFound("No hamburgers were found with that ID.");
+            return deleted ? NoContent() : NotFound("No burgers were found with that ID.");
         }
     }
 }
