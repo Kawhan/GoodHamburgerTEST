@@ -9,57 +9,116 @@ namespace GoodHamburgerProject.Repositories
     {
         public async Task<BurgerModel> AddBurgerAsync(BurgerModel burger)
         {
-            context.Burgers.Add(burger);
-            await context.SaveChangesAsync();
-            return new BurgerModel 
-            { 
-                Id = burger.Id,
-                Name = burger.Name,
-                Price = burger.Price,
-                Active = burger.Active,
-            };
+            try
+            {
+                context.Burgers.Add(burger);
+                await context.SaveChangesAsync();
+                return new BurgerModel
+                {
+                    Id = burger.Id,
+                    Name = burger.Name,
+                    Price = burger.Price,
+                    Active = burger.Active,
+                };
+            }
+            catch(Exception ex) 
+            {
+                throw new DatabaseException(
+                    methodName: "AddBurgerAsync",
+                    message: "Error add new burger to the database",
+                    innerException: ex
+                );
+            }
         }
 
         public async Task<bool> DeleteBurgerAsync(Guid id)
         {
-            var burger = await context.Burgers
+            try
+            {
+                var burger = await context.Burgers
                 .Where(b => b.Id == id).FirstOrDefaultAsync() ?? throw new BurgerNotFound();
-            burger.Active = false;
-            await context.SaveChangesAsync();
-            return true;
+                burger.Active = false;
+                await context.SaveChangesAsync();
+                return true;
+            } catch (Exception ex)
+            {
+                throw new DatabaseException(
+                    methodName: "DeleteBurgerAsync",
+                    message: "Error delete a burger to the database",
+                    innerException: ex
+                );
+            }
         }
 
         public async Task<List<BurgerModel>> GetAllBurgersAsync()
         {
-            var burgers = await context.Burgers.ToListAsync();
-
-            return burgers;
+            try
+            {
+                var burgers = await context.Burgers.ToListAsync();
+                return burgers;
+            }
+            catch (Exception ex) 
+            {
+                throw new DatabaseException(
+                        methodName: "GetAllBurgersAsync",
+                        message: "Error retrieving hamburgers from the database",
+                        innerException: ex
+                );
+            }
         }
 
         public async Task<BurgerModel?> GetBurguerByIdAsync(Guid id)
         {
-            var burger = await context.Burgers
-                .Where(b => b.Id == id).FirstOrDefaultAsync();
-
-            return burger;
+            try
+            {
+                var burger = await context.Burgers
+                    .Where(b => b.Id == id).FirstOrDefaultAsync();
+                return burger;
+            } catch (Exception ex)
+            {
+                throw new DatabaseException(
+                    methodName: "GetBurgerByIdAsync",
+                    message: "Error retrieving hamburger from the database",
+                    innerException: ex
+                );
+            }
         }
 
         public async Task<bool> CheckBurguerByNameAsync(string name)
         {
-            var exists = await context.Burgers
-                .Where(b => b.Name.ToLower() == name.ToLower() && b.Active)
-                .AnyAsync();
-
-            return exists;
+            try 
+            {
+                var exists = await context.Burgers
+               .Where(b => b.Name.ToLower() == name.ToLower() && b.Active)
+               .AnyAsync();
+                return exists;
+            } catch (Exception ex)
+            {
+                throw new DatabaseException(
+                    methodName: "CheckBurguerByNameAsync",
+                    message: "Error check status by burger name from the database",
+                    innerException: ex
+                );
+            }
         }
 
         public async Task<BurgerModel> GetBurguerByNameAsync(string name)
         {
-            var burger = await context.Burgers
+            try
+            {
+                var burger = await context.Burgers
                 .Where(b => b.Name.ToLower() == name.ToLower())
                 .FirstOrDefaultAsync() ?? throw new BurgerNotFound();
-
-            return burger;
+                return burger;
+            }
+            catch (Exception ex) 
+            {
+                throw new DatabaseException(
+                    methodName: "GetBurguerByNameAsync",
+                    message: "Error retrieving hamburger from the database",
+                    innerException: ex
+                );
+            }
         }
 
         public async Task<bool> UpdateBurgerAsync(BurgerModel burger)
@@ -71,7 +130,11 @@ namespace GoodHamburgerProject.Repositories
                 return true;
             } catch (Exception ex) 
             {
-                throw new InvalidOperationException(ex.Message);
+                throw new DatabaseException(
+                    methodName: "UpdateBurgerAsync",
+                    message: "Error updating burger record in database",
+                    innerException: ex
+                );
             }
             
         }

@@ -10,60 +10,122 @@ namespace GoodHamburgerProject.Repositories
     {
         public async Task<AccompanimentModel> AddAccompanimentAsync(AccompanimentModel accompaniment)
         {
-            context.Accompaniments.Add(accompaniment);
-            await context.SaveChangesAsync();
-            return new AccompanimentModel
-            { 
-                Id = accompaniment.Id,
-                Name = accompaniment.Name,
-                Price = accompaniment.Price,
-                Active = accompaniment.Active
-            };
+            try
+            {
+                context.Accompaniments.Add(accompaniment);
+                await context.SaveChangesAsync();
+                return new AccompanimentModel
+                {
+                    Id = accompaniment.Id,
+                    Name = accompaniment.Name,
+                    Price = accompaniment.Price,
+                    Active = accompaniment.Active
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseException(
+                        methodName: "AddAccompanimentAsync",
+                        message: "Error add new accompaniment to the database",
+                        innerException: ex
+                );
+            }
         }
 
         public async Task<bool> DeleteAccompanimentAsync(Guid id)
         {
-            var accompaniment = await context.Accompaniments
+            try
+            {
+                var accompaniment = await context.Accompaniments
                 .Where(ac => ac.Id == id)
                 .FirstOrDefaultAsync() ?? throw new AccompanimentNotFound();
-            accompaniment.Active = false;
-            await context.SaveChangesAsync();
-            return true;
+                accompaniment.Active = false;
+                await context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseException(
+                       methodName: "DeleteAccompanimentAsync",
+                       message: "Error delete a accompaniment to the database",
+                       innerException: ex
+               );
+            }
         }
 
         public async Task<AccompanimentModel?> GetAccompanimentByIdAsync(Guid id)
         {
-            var accompaniment = await context.Accompaniments
-                .Where(ac => ac.Id == id)
-                .FirstOrDefaultAsync();
-
-            return accompaniment;
+            try
+            {
+                var accompaniment = await context.Accompaniments
+               .Where(ac => ac.Id == id)
+               .FirstOrDefaultAsync();
+                return accompaniment;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseException(
+                       methodName: "GetAccompanimentByIdAsync",
+                       message: "Error retrieving accompaniment from the database",
+                       innerException: ex
+               );
+            }
         }
 
         public async Task<bool> CheckAccompanimentByNameAsync(string name)
         {
-            var exists = await context.Accompaniments
+            try
+            {
+                var exists = await context.Accompaniments
                 .Where(ac => ac.Name.ToLower() == name.ToLower() && ac.Active)
                 .AnyAsync();
-
-            return exists;
+                return exists;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseException(
+                        methodName: "CheckAccompanimentByNameAsync",
+                        message: "Error check status by accompaniments name from the database",
+                        innerException: ex
+                );
+            }
         }
 
         public async Task<AccompanimentModel> GetAccompanimentByNameAsync(string name)
         {
-            var accompaniment = await context.Accompaniments
-                .Where(ac => ac.Name.ToLower() == name.ToLower())
-                .FirstOrDefaultAsync() ?? throw new AccompanimentNotFound();
-
-            return accompaniment;
+            try
+            {
+                var accompaniment = await context.Accompaniments
+               .Where(ac => ac.Name.ToLower() == name.ToLower())
+               .FirstOrDefaultAsync() ?? throw new AccompanimentNotFound();
+                return accompaniment;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseException(
+                        methodName: "GetAccompanimentByNameAsync",
+                        message: "Error retrieving accompaniment by name from the database",
+                        innerException: ex
+                );
+            }
         }
 
         public async Task<List<AccompanimentModel>> GetAllAccompanimentsAsync()
         {
-            var accompaniment = await context.Accompaniments
+            try
+            {
+                var accompaniment = await context.Accompaniments
                 .ToListAsync();
-
-            return accompaniment;
+                return accompaniment;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseException(
+                        methodName: "GetAllAccompanimentsAsync",
+                        message: "Error retrieving all accompaniments from the database",
+                        innerException: ex
+                );
+            }
         }
 
         public async Task<bool> UpdateAccompanimentAsync(AccompanimentModel accompaniment)
@@ -75,7 +137,11 @@ namespace GoodHamburgerProject.Repositories
                 return true;
             } catch (Exception ex) 
             {
-                throw new InvalidOperationException(ex.Message);
+                throw new DatabaseException(
+                        methodName: "UpdateAccompanimentAsync",
+                        message: "Error updating accompaniment record in database",
+                        innerException: ex
+                );
             }
         }
     }

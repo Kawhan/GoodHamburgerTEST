@@ -60,6 +60,17 @@ public class ExceptionMiddleware
             context.Response.StatusCode = 500;
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
+        catch (DatabaseException ex)
+        {
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                success = false,
+                error = "DatabaseError",
+                message = ex.Message,
+                method = ex.MethodName
+            });
+        }
         catch (InvalidOperationException ex)
         {
             context.Response.StatusCode = 500;
@@ -68,7 +79,7 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             context.Response.StatusCode = 500;
-            await context.Response.WriteAsJsonAsync(new { error = "Internal server error" });
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
         
     }

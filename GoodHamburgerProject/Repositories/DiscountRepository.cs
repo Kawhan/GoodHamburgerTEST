@@ -8,9 +8,20 @@ namespace GoodHamburgerProject.Repositories
     {
         public async Task<List<DiscountModel>> GetActiveDiscountsAsync()
         {
-            return await context.Discounts
+            try
+            {
+                return await context.Discounts
                 .Include(d => d.Items)
                 .ToListAsync();
+            }
+            catch (Exception ex) 
+            {
+                throw new DatabaseException(
+                    methodName: "GetActiveDiscountsAsync",
+                    message: "Error retrieving active discounts from the database",
+                    innerException: ex
+                );
+            }
         }
     }
 }

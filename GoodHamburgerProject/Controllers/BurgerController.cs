@@ -17,16 +17,19 @@ namespace GoodHamburgerProject.Controllers
             return Ok(await serviceBurger.GetAllBurgersAsync());      
         }
 
+        /// <summary>
+        /// Retrieves a burger by its unique identifier.
+        /// </summary>
+        /// <param name="id">Burger unique identifier (GUID)</param>
+        /// <returns>A burger object if found</returns>
+        /// <response code="200">Returns the burger</response>
+        /// <response code="404">Burger not found</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(BurgerResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BurgerResponseDTO>> GetBurgerByGuid(Guid id)
         {
             var burguer = await serviceBurger.GetBurgerByIdAsync(id);
-
-            if (burguer is null)
-            {
-                return NotFound("No hamburgers were found with that ID.");
-            }
-
             return Ok(burguer);
         }
 
