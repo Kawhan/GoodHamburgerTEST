@@ -7,11 +7,11 @@ namespace GoodHamburgerProject.Repositories
     {
         Task<List<BurgerModel>> GetAllBurgersAsync();
 
-        Task<BurgerModel?> GetBurguerByIdAsync(Guid id);
+        Task<BurgerModel?> GetBurgerByIdAsync(Guid id);
 
-        Task<bool> CheckBurguerByNameAsync(string name);
+        Task<bool> CheckBurgerByNameAsync(string name);
 
-        Task<BurgerModel> GetBurguerByNameAsync(string name);
+        Task<BurgerModel> GetBurgerByNameAsync(string name);
 
         Task<BurgerModel> AddBurgerAsync(BurgerModel burger);
 

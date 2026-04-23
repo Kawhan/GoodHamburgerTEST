@@ -29,8 +29,8 @@ namespace GoodHamburgerProject.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BurgerResponseDTO>> GetBurgerByGuid(Guid id)
         {
-            var burguer = await serviceBurger.GetBurgerByIdAsync(id);
-            return Ok(burguer);
+            var burger = await serviceBurger.GetBurgerByIdAsync(id);
+            return Ok(burger);
         }
 
         /// <summary>

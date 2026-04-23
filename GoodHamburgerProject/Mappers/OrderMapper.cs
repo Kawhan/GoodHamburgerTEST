@@ -8,9 +8,10 @@ namespace GoodHamburgerProject.Mappers
 {
     public static class OrderMapper
     {
-        public static async Task<OrderResponseDTO> ToDTOAsync(
-            this OrderModel order,
-            AppDbContext context)
+        public static OrderResponseDTO ToDTO(
+        this OrderModel order,
+        Dictionary<Guid, BurgerModel> burgers,
+        Dictionary<Guid, AccompanimentModel> accompaniments)
         {
             var itemsDto = new List<OrderItemResponseDTO>();
 
@@ -21,21 +22,15 @@ namespace GoodHamburgerProject.Mappers
 
                 if (item.ProductType == ProductTypeEnum.Burger)
                 {
-                    var burger = await context.Burgers
-                        .FirstOrDefaultAsync(b => b.Id == item.ProductId);
-
-                    if (burger != null)
+                    if (burgers.TryGetValue(item.ProductId, out var burger))
                     {
                         name = burger.Name;
                         active = burger.Active;
                     }
                 }
-                else
+                else if (item.ProductType == ProductTypeEnum.Accompaniment)
                 {
-                    var accompaniment = await context.Accompaniments
-                        .FirstOrDefaultAsync(a => a.Id == item.ProductId);
-
-                    if (accompaniment != null)
+                    if (accompaniments.TryGetValue(item.ProductId, out var accompaniment))
                     {
                         name = accompaniment.Name;
                         active = accompaniment.Active;
@@ -49,7 +44,7 @@ namespace GoodHamburgerProject.Mappers
                     ProductId = item.ProductId,
                     Name = name,
                     Price = item.Price,
-                    Active = item.Active 
+                    Active = item.Active
                 });
             }
 

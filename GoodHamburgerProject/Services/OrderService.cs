@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoodHamburgerProject.Services
 {
-    public class OrderService(AppDbContext context, IOrderRepository repository, IDiscountRepository discountRepository) : IOrderService
+    public class OrderService(IOrderRepository repository, IDiscountRepository discountRepository, IBurgerRepository burgerRepository, IAccompanimentRepository accompanimentRepository) : IOrderService
     {
         public async Task<OrderResponseDTO> CreateOrderAsync(CreateOrderRequestDTO request)
         {
@@ -32,7 +32,9 @@ namespace GoodHamburgerProject.Services
 
             var createdOrder = await repository.AddOrderAsync(order);
 
-            return await createdOrder.ToDTOAsync(context);
+            var productsData = await repository.GetProductsDataAsync(createdOrder);
+
+            return createdOrder.ToDTO(productsData.Burgers, productsData.Accompaniments);
         }
 
 
@@ -44,7 +46,8 @@ namespace GoodHamburgerProject.Services
 
             foreach (var order in orders)
             {
-                var dto = await order.ToDTOAsync(context);
+                var productsData = await repository.GetProductsDataAsync(order);
+                var dto = order.ToDTO(productsData.Burgers, productsData.Accompaniments);
                 result.Add(dto);
             }
 
@@ -58,7 +61,10 @@ namespace GoodHamburgerProject.Services
             if (order is null)
                 throw new OrderNotFoundException();
 
-            return await order.ToDTOAsync(context);
+            var productsData = await repository.GetProductsDataAsync(order);
+
+
+            return order.ToDTO(productsData.Burgers, productsData.Accompaniments);
         }
 
         public async Task<bool> DeleteOrderAsync(Guid id)
@@ -68,7 +74,16 @@ namespace GoodHamburgerProject.Services
             if (order is null)
                 throw new OrderNotFoundException();
 
-            return await repository.DeleteOrderAsync(id);
+            order.Active = false;
+
+            foreach (var item in order.Items)
+            {
+                item.Active = false;
+            }
+
+            await RecalculateOrder(order);
+
+            return await repository.DeleteOrderAsync(order);
         }
 
         public async Task<bool> UpdateOrderAsync(Guid id, UpdateOrderRequestDTO request)
@@ -120,7 +135,7 @@ namespace GoodHamburgerProject.Services
             };
         }
 
-        private async Task<decimal> GetProductPriceAsync(OrderItemRequestDTO item)
+        public virtual async Task<decimal> GetProductPriceAsync(OrderItemRequestDTO item)
         {
             return item.ProductType switch
             {
@@ -132,22 +147,20 @@ namespace GoodHamburgerProject.Services
 
         private async Task<decimal> GetBurgerPriceAsync(Guid id)
         {
-            var burger = await context.Burgers
-                .FirstOrDefaultAsync(b => b.Id == id);
+            var burger = await burgerRepository.GetBurgerByIdAsync(id);
 
             if (burger == null)
-                throw new BurgerNotFound();
+                throw new BurgerNotFoundException();
 
             return burger.Price;
         }
 
         private async Task<decimal> GetAccompanimentPriceAsync(Guid id)
         {
-            var accompaniment = await context.Accompaniments
-                .FirstOrDefaultAsync(a => a.Id == id);
+            var accompaniment = await accompanimentRepository.GetAccompanimentByIdAsync(id);
 
             if (accompaniment == null)
-                throw new AccompanimentNotFound();
+                throw new AccompanimentNotFoundException();
 
             return accompaniment.Price;
         }
@@ -163,6 +176,7 @@ namespace GoodHamburgerProject.Services
             var discounts = await discountRepository.GetActiveDiscountsAsync();
 
             var orderProductIds = order.Items
+                .Where(i => i.Active)
                 .Select(i => i.ProductId)
                 .ToList();
 
@@ -282,20 +296,20 @@ namespace GoodHamburgerProject.Services
 
         private async Task<decimal> GetBurgerPrice(Guid id)
         {
-            var burger = await context.Burgers.FirstOrDefaultAsync(b => b.Id == id);
+            var burger = await burgerRepository.GetBurgerByIdAsync(id);
 
             if (burger is null)
-                throw new BurgerNotFound();
+                throw new BurgerNotFoundException();
 
             return burger.Price;
         }
 
         private async Task<decimal> GetAccompanimentPrice(Guid id)
         {
-            var accompaniment = await context.Accompaniments.FirstOrDefaultAsync(a => a.Id == id);
+            var accompaniment = await accompanimentRepository.GetAccompanimentByIdAsync(id);
 
             if (accompaniment is null)
-                throw new AccompanimentNotFound();
+                throw new AccompanimentNotFoundException();
 
             return accompaniment.Price;
         }

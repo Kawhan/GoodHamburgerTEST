@@ -38,7 +38,7 @@ namespace GoodHamburgerProject.Data.Configurations
 
             builder.HasData(
                 // =========================
-                // X Burguer
+                // X Burger
                 // =========================
 
 
