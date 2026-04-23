@@ -42,7 +42,7 @@ namespace GoodHamburgerProject.Services
 
             if (result is null)
             {
-                throw new BurgerNotFound();
+                throw new AccompanimentNotFound();
             }
 
             return result.ToDTO();

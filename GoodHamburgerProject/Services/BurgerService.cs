@@ -25,7 +25,7 @@ namespace GoodHamburgerProject.Services
 
         public async Task<bool> DeleteBurgerAsync(Guid id)
         {
-            var result = await burgerRepository.GetBurguerByIdAsync(id);
+            var result = await burgerRepository.GetBurgerByIdAsync(id);
 
             if (result is null)
             {
@@ -46,7 +46,7 @@ namespace GoodHamburgerProject.Services
 
         public async Task<BurgerResponseDTO?> GetBurgerByIdAsync(Guid id)
         {
-            var result = await burgerRepository.GetBurguerByIdAsync(id);
+            var result = await burgerRepository.GetBurgerByIdAsync(id);
 
             if (result is null)
             {
@@ -58,13 +58,13 @@ namespace GoodHamburgerProject.Services
 
         public async Task<bool> ExistsBurgerByNameAsync(string name)
         {
-            var result = await burgerRepository.CheckBurguerByNameAsync(name);
+            var result = await burgerRepository.CheckBurgerByNameAsync(name);
             return result;
         }
 
         public async Task<BurgerModel> GetBurgerByNameAsync(string name)
         {
-            var result = await burgerRepository.GetBurguerByNameAsync(name);
+            var result = await burgerRepository.GetBurgerByNameAsync(name);
             return result;
         }
 
@@ -72,7 +72,7 @@ namespace GoodHamburgerProject.Services
         {
             await VerifyUpdateBurger(burger, id);  
 
-            var existsBurger = await burgerRepository.GetBurguerByIdAsync(id);
+            var existsBurger = await burgerRepository.GetBurgerByIdAsync(id);
 
             if (existsBurger is null)
             {

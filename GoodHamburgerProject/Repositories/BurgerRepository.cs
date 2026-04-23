@@ -67,7 +67,7 @@ namespace GoodHamburgerProject.Repositories
             }
         }
 
-        public async Task<BurgerModel?> GetBurguerByIdAsync(Guid id)
+        public async Task<BurgerModel?> GetBurgerByIdAsync(Guid id)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace GoodHamburgerProject.Repositories
             }
         }
 
-        public async Task<bool> CheckBurguerByNameAsync(string name)
+        public async Task<bool> CheckBurgerByNameAsync(string name)
         {
             try 
             {
@@ -95,14 +95,14 @@ namespace GoodHamburgerProject.Repositories
             } catch (Exception ex)
             {
                 throw new DatabaseException(
-                    methodName: "CheckBurguerByNameAsync",
+                    methodName: "CheckBurgerByNameAsync",
                     message: "Error check status by burger name from the database",
                     innerException: ex
                 );
             }
         }
 
-        public async Task<BurgerModel> GetBurguerByNameAsync(string name)
+        public async Task<BurgerModel> GetBurgerByNameAsync(string name)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace GoodHamburgerProject.Repositories
             catch (Exception ex) 
             {
                 throw new DatabaseException(
-                    methodName: "GetBurguerByNameAsync",
+                    methodName: "GetBurgerByNameAsync",
                     message: "Error retrieving hamburger from the database",
                     innerException: ex
                 );
