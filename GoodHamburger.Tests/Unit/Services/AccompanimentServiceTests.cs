@@ -74,7 +74,7 @@ namespace GoodHamburger.Tests.Unit.Services
             mockRepo.Setup(r => r.GetAccompanimentByIdAsync(id))
                 .ReturnsAsync(value: null);
 
-            await Assert.ThrowsAsync<AccompanimentNotFound>(() =>
+            await Assert.ThrowsAsync<AccompanimentNotFoundException>(() =>
                 service.DeleteAccompanimentAsync(id));
         }
 
@@ -146,7 +146,7 @@ namespace GoodHamburger.Tests.Unit.Services
             mockRepo.Setup(r => r.GetAccompanimentByIdAsync(id))
                 .ReturnsAsync(value: null);
 
-            await Assert.ThrowsAsync<AccompanimentNotFound>(() =>
+            await Assert.ThrowsAsync<AccompanimentNotFoundException>(() =>
                 service.GetAccompanimentByIdAsync(id));
         }
 
@@ -195,7 +195,7 @@ namespace GoodHamburger.Tests.Unit.Services
             mockRepo.Setup(r => r.GetAccompanimentByIdAsync(id))
                 .ReturnsAsync(value: null);
 
-            await Assert.ThrowsAsync<AccompanimentNotFound>(() =>
+            await Assert.ThrowsAsync<AccompanimentNotFoundException>(() =>
                 service.UpdateAccompanimentAsync(id, request));
         }
 

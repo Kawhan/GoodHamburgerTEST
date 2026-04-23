@@ -38,7 +38,7 @@ namespace GoodHamburgerProject.Repositories
             {
                 var accompaniment = await context.Accompaniments
                 .Where(ac => ac.Id == id)
-                .FirstOrDefaultAsync() ?? throw new AccompanimentNotFound();
+                .FirstOrDefaultAsync() ?? throw new AccompanimentNotFoundException();
                 accompaniment.Active = false;
                 await context.SaveChangesAsync();
                 return true;
@@ -97,7 +97,7 @@ namespace GoodHamburgerProject.Repositories
             {
                 var accompaniment = await context.Accompaniments
                .Where(ac => ac.Name.ToLower() == name.ToLower())
-               .FirstOrDefaultAsync() ?? throw new AccompanimentNotFound();
+               .FirstOrDefaultAsync() ?? throw new AccompanimentNotFoundException();
                 return accompaniment;
             }
             catch (Exception ex)

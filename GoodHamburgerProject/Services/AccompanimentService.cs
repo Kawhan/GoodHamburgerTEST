@@ -28,7 +28,7 @@ namespace GoodHamburgerProject.Services
 
             if (result is null)
             {
-                throw new AccompanimentNotFound();
+                throw new AccompanimentNotFoundException();
             }
 
             var status = await accompanimentRepository.DeleteAccompanimentAsync(id);
@@ -42,7 +42,7 @@ namespace GoodHamburgerProject.Services
 
             if (result is null)
             {
-                throw new AccompanimentNotFound();
+                throw new AccompanimentNotFoundException();
             }
 
             return result.ToDTO();
@@ -63,7 +63,7 @@ namespace GoodHamburgerProject.Services
 
             if (existsAccompaniment is null)
             {
-                throw new AccompanimentNotFound();
+                throw new AccompanimentNotFoundException();
             }
 
             existsAccompaniment.Name = accompaniment.Name;

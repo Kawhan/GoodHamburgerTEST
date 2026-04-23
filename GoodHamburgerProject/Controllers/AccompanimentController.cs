@@ -19,7 +19,6 @@ namespace GoodHamburgerProject.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<AccompanimentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet]
         public async Task<ActionResult<List<BurgerResponseDTO>>> GetAllAccompaniments()
         {
             return Ok(await serviceAccompaniment.GetAllAccompanimentsAsync());
@@ -58,7 +57,6 @@ namespace GoodHamburgerProject.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost]
         public async Task<ActionResult<AccompanimentResponseDTO>> AddAccompaniment(CreateAccompanimentRequestDTO request)
         {
             var createdAccompaniment = await serviceAccompaniment.AddAccompanimentAsync(request);
@@ -84,7 +82,6 @@ namespace GoodHamburgerProject.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPut]
         public async Task<ActionResult> UpdateAccompaniment(Guid id, UpdateAccompanimentRequestDTO request)
         {
             var updated = await serviceAccompaniment.UpdateAccompanimentAsync(id, request);

@@ -20,7 +20,7 @@ public class ExceptionMiddleware
             context.Response.StatusCode = 409;
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
-        catch (AccompanimentNotFound ex)
+        catch (AccompanimentNotFoundException ex)
         {
             context.Response.StatusCode = 404;
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });
@@ -30,7 +30,7 @@ public class ExceptionMiddleware
             context.Response.StatusCode = 409;
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
-        catch (BurgerNotFound ex)
+        catch (BurgerNotFoundException ex)
         {
             context.Response.StatusCode = 404;
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });

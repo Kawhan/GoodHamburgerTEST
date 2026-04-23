@@ -11,6 +11,7 @@ namespace GoodHamburgerProject.Repositories
             try
             {
                 return await context.Discounts
+                .Where(d => d.Active)
                 .Include(d => d.Items)
                 .ToListAsync();
             }

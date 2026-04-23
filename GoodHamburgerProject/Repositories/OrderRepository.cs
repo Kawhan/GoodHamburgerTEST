@@ -1,4 +1,6 @@
 ﻿using GoodHamburgerProject.Data;
+using GoodHamburgerProject.DTOs;
+using GoodHamburgerProject.Enums;
 using GoodHamburgerProject.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,26 +63,11 @@ namespace GoodHamburgerProject.Repositories
             }
         }
 
-        public async Task<bool> DeleteOrderAsync(Guid id)
+        public async Task<bool> DeleteOrderAsync(OrderModel order)
         {
             try
             {
-                var order = await context.Orders
-                .Include(o => o.Items)
-                .FirstOrDefaultAsync(o => o.Id == id);
-
-                if (order is null)
-                    return false;
-
-                order.Active = false;
-
-                foreach (var item in order.Items)
-                {
-                    item.Active = false;
-                }
-
                 await context.SaveChangesAsync();
-
                 return true;
             }
             catch (Exception ex)
@@ -109,6 +96,35 @@ namespace GoodHamburgerProject.Repositories
                         innerException: ex
                 );
             }
+        }
+
+        public async Task<OrderProductsData> GetProductsDataAsync(OrderModel order)
+        {
+            var burgerIds = order.Items
+                .Where(i => i.ProductType == ProductTypeEnum.Burger)
+                .Select(i => i.ProductId)
+                .Distinct()
+                .ToList();
+
+            var accompanimentIds = order.Items
+                .Where(i => i.ProductType != ProductTypeEnum.Burger)
+                .Select(i => i.ProductId)
+                .Distinct()
+                .ToList();
+
+            var burgers = await context.Burgers
+                .Where(b => burgerIds.Contains(b.Id))
+                .ToDictionaryAsync(b => b.Id);
+
+            var accompaniments = await context.Accompaniments
+                .Where(a => accompanimentIds.Contains(a.Id))
+                .ToDictionaryAsync(a => a.Id);
+
+            return new OrderProductsData
+            {
+                Burgers = burgers,
+                Accompaniments = accompaniments
+            };
         }
     }
 }

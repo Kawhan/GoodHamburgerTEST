@@ -1,8 +1,8 @@
 ﻿namespace GoodHamburgerProject.Exceptions
 {
-    public class BurgerNotFound : BurgerException
+    public class BurgerNotFoundException : BurgerException
     {
-        public BurgerNotFound()
+        public BurgerNotFoundException()
             : base("No hamburger was found with that ID.") { }
     }
 }

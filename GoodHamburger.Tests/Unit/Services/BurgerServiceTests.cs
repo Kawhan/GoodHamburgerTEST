@@ -70,7 +70,7 @@ namespace GoodHamburger.Tests.Unit.Services
             mockRepo.Setup(r => r.GetBurgerByIdAsync(id))
                 .ReturnsAsync(value: null);
 
-            await Assert.ThrowsAsync<BurgerNotFound>(() =>
+            await Assert.ThrowsAsync<BurgerNotFoundException>(() =>
                 service.DeleteBurgerAsync(id));
         }
 
@@ -142,7 +142,7 @@ namespace GoodHamburger.Tests.Unit.Services
             mockRepo.Setup(r => r.GetBurgerByIdAsync(id))
                 .ReturnsAsync(value: null);
 
-            await Assert.ThrowsAsync<BurgerNotFound>(() =>
+            await Assert.ThrowsAsync<BurgerNotFoundException>(() =>
                 service.GetBurgerByIdAsync(id));
         }
 
@@ -191,7 +191,7 @@ namespace GoodHamburger.Tests.Unit.Services
             mockRepo.Setup(r => r.GetBurgerByIdAsync(id))
                 .ReturnsAsync(value: null);
 
-            await Assert.ThrowsAsync<BurgerNotFound>(() =>
+            await Assert.ThrowsAsync<BurgerNotFoundException>(() =>
                 service.UpdateBurgerAsync(id, request));
         }
 

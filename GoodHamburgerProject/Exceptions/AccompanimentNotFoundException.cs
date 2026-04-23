@@ -1,8 +1,8 @@
 ﻿namespace GoodHamburgerProject.Exceptions
 {
-    public class AccompanimentNotFound : AccompanimentException
+    public class AccompanimentNotFoundException : AccompanimentException
     {
-        public AccompanimentNotFound()
+        public AccompanimentNotFoundException()
             : base("No Accompaniment was found with that ID.") { }
     }
 }

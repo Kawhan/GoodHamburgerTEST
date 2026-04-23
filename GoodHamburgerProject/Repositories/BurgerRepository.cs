@@ -36,7 +36,7 @@ namespace GoodHamburgerProject.Repositories
             try
             {
                 var burger = await context.Burgers
-                .Where(b => b.Id == id).FirstOrDefaultAsync() ?? throw new BurgerNotFound();
+                .Where(b => b.Id == id).FirstOrDefaultAsync() ?? throw new BurgerNotFoundException();
                 burger.Active = false;
                 await context.SaveChangesAsync();
                 return true;
@@ -108,7 +108,7 @@ namespace GoodHamburgerProject.Repositories
             {
                 var burger = await context.Burgers
                 .Where(b => b.Name.ToLower() == name.ToLower())
-                .FirstOrDefaultAsync() ?? throw new BurgerNotFound();
+                .FirstOrDefaultAsync() ?? throw new BurgerNotFoundException();
                 return burger;
             }
             catch (Exception ex) 

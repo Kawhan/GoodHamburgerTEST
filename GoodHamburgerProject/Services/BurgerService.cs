@@ -29,7 +29,7 @@ namespace GoodHamburgerProject.Services
 
             if (result is null)
             {
-                throw new BurgerNotFound();
+                throw new BurgerNotFoundException();
             }
 
             var status = await burgerRepository.DeleteBurgerAsync(id);
@@ -50,7 +50,7 @@ namespace GoodHamburgerProject.Services
 
             if (result is null)
             {
-                throw new BurgerNotFound();
+                throw new BurgerNotFoundException();
             }
 
             return result.ToDTO();
@@ -76,7 +76,7 @@ namespace GoodHamburgerProject.Services
 
             if (existsBurger is null)
             {
-                throw new BurgerNotFound();
+                throw new BurgerNotFoundException();
             }
 
             existsBurger.Name = burger.Name;
