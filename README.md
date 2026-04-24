@@ -149,6 +149,47 @@ Content-Type: application/json
 
 ---
 
+### Atualizar um pedido
+
+Permite atualizar os itens de um pedido existente.  
+O sistema recalcula automaticamente o total e o desconto com base na nova combinação.
+
+**Request:**
+```http
+PUT /api/Order/{id}
+Content-Type: application/json
+```
+
+```json
+{
+  "items": [
+    { "productType": 1, "productId": "11111111-1111-1111-1111-111111111111" },
+    { "productType": 2, "productId": "55555555-5555-5555-5555-555555555555" }
+  ]
+}
+```
+
+> `productType`: 1 = Burger, 2 = Accompaniment
+
+**Response (200 Ok):**
+
+```json
+{
+  "id": "a1b2c3d4-...",
+  "totalAmount": 7.50,
+  "discount": 1.13,
+  "finalAmount": 6.38,
+  "createdAt": "2026-04-22T14:00:00Z",
+  "active": true,
+  "items": [
+    { "productType": 1, "productId": "11111111-...", "name": "X Burger", "price": 5.00 },
+    { "productType": 2, "productId": "55555555-...", "name": "Refrigerante", "price": 2.50 }
+  ]
+}
+```
+
+---
+
 ## Regras de Negócio
 
 - Cada pedido aceita **no máximo 1 sanduíche**
