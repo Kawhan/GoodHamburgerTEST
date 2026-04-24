@@ -48,7 +48,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                     Name = "Combo Completo",
                     Percentage = 0.20m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
 
@@ -58,7 +58,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                     Name = "Combo Burger + Refri",
                     Percentage = 0.15m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
 
@@ -68,7 +68,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"),
                     Name = "Combo Burger + Batata",
                     Percentage = 0.10m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
 
@@ -81,7 +81,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("d1111111-1111-1111-1111-111111111111"),
                     Name = "Combo X Egg Completo",
                     Percentage = 0.20m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
                 new DiscountModel
@@ -89,7 +89,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("d2222222-2222-2222-2222-222222222222"),
                     Name = "Combo X Egg + Refri",
                     Percentage = 0.15m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
                 new DiscountModel
@@ -97,7 +97,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("d3333333-3333-3333-3333-333333333333"),
                     Name = "Combo X Egg + Batata",
                     Percentage = 0.10m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
 
@@ -109,7 +109,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("d4444444-4444-4444-4444-444444444444"),
                     Name = "Combo X Bacon Completo",
                     Percentage = 0.20m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
                 new DiscountModel
@@ -117,7 +117,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("d5555555-5555-5555-5555-555555555555"),
                     Name = "Combo X Bacon + Refri",
                     Percentage = 0.15m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 },
                 new DiscountModel
@@ -125,7 +125,7 @@ namespace GoodHamburgerProject.Data.Configurations
                     Id = Guid.Parse("d6666666-6666-6666-6666-666666666666"),
                     Name = "Combo X Bacon + Batata",
                     Percentage = 0.10m,
-                    CreatedAt = new DateTime(2024, 1, 1),
+                    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Active = true
                 }
 
