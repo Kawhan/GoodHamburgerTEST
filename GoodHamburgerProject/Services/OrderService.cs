@@ -5,11 +5,15 @@ using GoodHamburgerProject.Exceptions;
 using GoodHamburgerProject.Mappers;
 using GoodHamburgerProject.Models;
 using GoodHamburgerProject.Repositories;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoodHamburgerProject.Services
 {
-    public class OrderService(IOrderRepository repository, IDiscountRepository discountRepository, IBurgerRepository burgerRepository, IAccompanimentRepository accompanimentRepository) : IOrderService
+    public class OrderService(IOrderRepository repository, 
+        IDiscountRepository discountRepository, 
+        IBurgerRepository burgerRepository, 
+        IAccompanimentRepository accompanimentRepository) : IOrderService
     {
         public async Task<OrderResponseDTO> CreateOrderAsync(CreateOrderRequestDTO request)
         {
@@ -52,6 +56,35 @@ namespace GoodHamburgerProject.Services
             }
 
             return result;
+        }
+
+        public async Task<PagedResult<OrderResponseDTO>> GetAllOrdersPagedAsync(int page, int pageSize)
+        {
+            var orders = await repository.GetAllOrdersAsync();
+
+            var totalCount = orders.Count;
+
+            var pagedOrders = orders
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var result = new List<OrderResponseDTO>();
+
+            foreach (var order in pagedOrders)
+            {
+                var productsData = await repository.GetProductsDataAsync(order);
+                var dto = order.ToDTO(productsData.Burgers, productsData.Accompaniments);
+                result.Add(dto);
+            }
+
+            return new PagedResult<OrderResponseDTO>
+            {
+                Items = result,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
 
         public async Task<OrderResponseDTO> GetOrderByIdAsync(Guid id)

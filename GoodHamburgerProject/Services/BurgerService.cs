@@ -44,6 +44,27 @@ namespace GoodHamburgerProject.Services
             return burgers.Select(b=> b.ToDTO()).ToList();
         }
 
+        public async Task<PagedResult<BurgerResponseDTO>> GetAllBurgersPagedAsync(int page, int pageSize)
+        {
+            var query = await burgerRepository.GetAllBurgersAsync();
+
+            var totalCount = query.Count();
+
+            var items = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(b => b.ToDTO())
+                .ToList();
+
+            return new PagedResult<BurgerResponseDTO>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
+        }
+
         public async Task<BurgerResponseDTO?> GetBurgerByIdAsync(Guid id)
         {
             var result = await burgerRepository.GetBurgerByIdAsync(id);

@@ -1,12 +1,16 @@
 ﻿
 
 using GoodHamburgerProject.DTOs;
+using GoodHamburgerProject.Models;
 
 namespace GoodHamburgerProject.Services
 {
     public interface IAccompanimentService
     {
         Task<List<AccompanimentResponseDTO>> GetAllAccompanimentsAsync();
+
+        Task<PagedResult<AccompanimentResponseDTO>> GetAllAccompanimentsPagedAsync(int page, int page_size);
+
 
         Task<AccompanimentResponseDTO?> GetAccompanimentByIdAsync(Guid id);
 

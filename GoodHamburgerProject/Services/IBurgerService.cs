@@ -7,6 +7,8 @@ namespace GoodHamburgerProject.Services
     {
         Task<List<BurgerResponseDTO>> GetAllBurgersAsync();
 
+        Task<PagedResult<BurgerResponseDTO>> GetAllBurgersPagedAsync(int page, int page_size);
+
         Task<BurgerResponseDTO?> GetBurgerByIdAsync(Guid id);
 
         Task<BurgerResponseDTO> AddBurgerAsync(CreateBurgerRequestDTO burger);

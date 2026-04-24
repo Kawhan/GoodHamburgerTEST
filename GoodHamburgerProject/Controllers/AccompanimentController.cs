@@ -13,15 +13,18 @@ namespace GoodHamburgerProject.Controllers
         /// <summary>
         /// Retrieves all accompaniments.
         /// </summary>
-        /// <returns>A list of accompaniments</returns>
+        /// <param name="page">Page number (default is 1)</param>
+        /// <param name="pageSize">Number of items per page (default is 10)</param>
+        /// <returns>A paginated list of accompaniments</returns>
         /// <response code="200">Returns the list of accompaniments</response>
         /// <response code="500">Database Error</response>
         [HttpGet]
         [ProducesResponseType(typeof(List<AccompanimentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<BurgerResponseDTO>>> GetAllAccompaniments()
+        public async Task<ActionResult<List<BurgerResponseDTO>>> GetAllAccompaniments([FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            return Ok(await serviceAccompaniment.GetAllAccompanimentsAsync());
+            return Ok(await serviceAccompaniment.GetAllAccompanimentsPagedAsync(page, pageSize));
         }
 
 

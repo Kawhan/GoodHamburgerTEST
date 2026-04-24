@@ -44,17 +44,22 @@ namespace GoodHamburgerProject.Controllers
         }
 
         /// <summary>
-        /// Retrieves all orders with their items, totals, and applied discounts.
+        /// Retrieves a paginated list of orders with their items, totals, and applied discounts.
         /// </summary>
-        /// <returns>A list of orders</returns>
+        /// <param name="page">Page number (default is 1)</param>
+        /// <param name="pageSize">Number of items per page (default is 10)</param>
+        /// <returns>A paginated list of orders</returns>
+        /// <remarks>
+        /// Example:
+        /// GET /api/Order?page=1&pageSize=10
+        /// </remarks>
         /// <response code="200">Orders successfully retrieved</response>
-        /// <response code="204">No orders found</response>
         [ProducesResponseType(typeof(List<OrderResponseDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpGet]
-        public async Task<ActionResult<List<OrderResponseDTO>>> GetAllOrders()
+        public async Task<ActionResult<List<OrderResponseDTO>>> GetAllOrders([FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            return Ok(await orderService.GetAllOrdersAsync());
+            return Ok(await orderService.GetAllOrdersPagedAsync(page, pageSize));
         }
 
         /// <summary>

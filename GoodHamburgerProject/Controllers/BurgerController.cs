@@ -11,10 +11,19 @@ namespace GoodHamburgerProject.Controllers
     [ApiController]
     public class BurgerController(IBurgerService serviceBurger) : ControllerBase
     {
+        /// <summary>
+        /// Retrieves a paginated list of burgers.
+        /// </summary>
+        /// <param name="page">Page number (default is 1)</param>
+        /// <param name="pageSize">Number of items per page (default is 10)</param>
+        /// <returns>A paginated list of burgers</returns>
+        /// <response code="200">Returns the paginated list of burgers</response>
         [HttpGet]
-        public async Task<ActionResult<List<BurgerResponseDTO>>> GetAllBurgers()
+        [ProducesResponseType(typeof(PagedResult<BurgerResponseDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<BurgerResponseDTO>>> GetAllBurgers([FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            return Ok(await serviceBurger.GetAllBurgersAsync());      
+            return Ok(await serviceBurger.GetAllBurgersPagedAsync(page, pageSize));      
         }
 
         /// <summary>

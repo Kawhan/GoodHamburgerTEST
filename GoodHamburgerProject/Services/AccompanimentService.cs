@@ -55,6 +55,28 @@ namespace GoodHamburgerProject.Services
             return accompaniments.Select(ac => ac.ToDTO()).ToList();
         }
 
+        public async Task<PagedResult<AccompanimentResponseDTO>> GetAllAccompanimentsPagedAsync(int page, int pageSize)
+        {
+            var query = await accompanimentRepository.GetAllAccompanimentsAsync();
+
+            var totalCount = query.Count();
+
+            var items = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(b => b.ToDTO())
+                .ToList();
+
+            return new PagedResult<AccompanimentResponseDTO>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
+        }
+
+
         public async Task<bool> UpdateAccompanimentAsync(Guid id, UpdateAccompanimentRequestDTO accompaniment)
         {
             await VerifyUpdateAccompaniment(accompaniment, id);
