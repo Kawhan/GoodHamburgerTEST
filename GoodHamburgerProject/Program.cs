@@ -12,8 +12,11 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString)
+);
 
 
 
@@ -47,5 +50,36 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    var retries = 10;
+
+    while (retries > 0)
+    {
+        try
+        {
+            logger.LogInformation("Applying database migrations...");
+            db.Database.Migrate();
+            logger.LogInformation("Database ready.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            retries--;
+
+            logger.LogWarning(ex, "Error connecting to DB. Retries left: {Retries}", retries);
+
+            if (retries == 0)
+                throw;
+
+            await Task.Delay(3000);
+        }
+    }
+}
+
 
 app.Run();

@@ -4,6 +4,7 @@ using GoodHamburgerProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,27 +16,31 @@ namespace GoodHamburgerProject.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.6");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "10.0.6")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("GoodHamburgerProject.Models.AccompanimentModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("numeric(10,2)");
 
                     b.HasKey("Id");
 
@@ -62,21 +67,21 @@ namespace GoodHamburgerProject.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("numeric(10,2)");
 
                     b.HasKey("Id");
 
@@ -110,16 +115,16 @@ namespace GoodHamburgerProject.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("DiscountId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("ProductType")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -282,27 +287,27 @@ namespace GoodHamburgerProject.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(150)");
 
                     b.Property<decimal>("Percentage")
                         .HasPrecision(5, 2)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("numeric(5,2)");
 
                     b.HasKey("Id");
 
@@ -315,7 +320,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo Completo",
                             Percentage = 0.20m
                         },
@@ -323,7 +328,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo Burger + Refri",
                             Percentage = 0.15m
                         },
@@ -331,7 +336,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo Burger + Batata",
                             Percentage = 0.10m
                         },
@@ -339,7 +344,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("d1111111-1111-1111-1111-111111111111"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo X Egg Completo",
                             Percentage = 0.20m
                         },
@@ -347,7 +352,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("d2222222-2222-2222-2222-222222222222"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo X Egg + Refri",
                             Percentage = 0.15m
                         },
@@ -355,7 +360,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("d3333333-3333-3333-3333-333333333333"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo X Egg + Batata",
                             Percentage = 0.10m
                         },
@@ -363,7 +368,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("d4444444-4444-4444-4444-444444444444"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo X Bacon Completo",
                             Percentage = 0.20m
                         },
@@ -371,7 +376,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("d5555555-5555-5555-5555-555555555555"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo X Bacon + Refri",
                             Percentage = 0.15m
                         },
@@ -379,7 +384,7 @@ namespace GoodHamburgerProject.Migrations
                         {
                             Id = new Guid("d6666666-6666-6666-6666-666666666666"),
                             Active = true,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Combo X Bacon + Batata",
                             Percentage = 0.10m
                         });
@@ -389,25 +394,25 @@ namespace GoodHamburgerProject.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("numeric(10,2)");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("ProductType")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -421,27 +426,27 @@ namespace GoodHamburgerProject.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("Discount")
                         .HasPrecision(10, 2)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("numeric(10,2)");
 
                     b.Property<decimal>("FinalAmount")
                         .HasPrecision(10, 2)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("numeric(10,2)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasPrecision(10, 2)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("numeric(10,2)");
 
                     b.HasKey("Id");
 

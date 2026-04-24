@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    ports:
+      - "5000:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=goodhamburger;Username=postgres;Password=postgres
+
+  db:
+    image: postgres:16-alpine
+    container_name: goodhamburger_db
+    restart: always
+    environment:
+      POSTGRES_DB: goodhamburger
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

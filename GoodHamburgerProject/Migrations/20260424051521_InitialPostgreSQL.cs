@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GoodHamburgerProject.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialPostgreSQL : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,10 +17,10 @@ namespace GoodHamburgerProject.Migrations
                 name: "Accompaniments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Price = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -31,10 +31,10 @@ namespace GoodHamburgerProject.Migrations
                 name: "Burgers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Price = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -45,12 +45,12 @@ namespace GoodHamburgerProject.Migrations
                 name: "Discounts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    Percentage = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Percentage = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -61,12 +61,12 @@ namespace GoodHamburgerProject.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
-                    Discount = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
-                    FinalAmount = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    Discount = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    FinalAmount = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -77,10 +77,10 @@ namespace GoodHamburgerProject.Migrations
                 name: "DiscountItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DiscountId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProductType = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiscountId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,12 +97,12 @@ namespace GoodHamburgerProject.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    OrderId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProductType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductType = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -139,15 +139,15 @@ namespace GoodHamburgerProject.Migrations
                 columns: new[] { "Id", "Active", "CreatedAt", "DeletedAt", "Name", "Percentage" },
                 values: new object[,]
                 {
-                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo Completo", 0.20m },
-                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo Burger + Refri", 0.15m },
-                    { new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo Burger + Batata", 0.10m },
-                    { new Guid("d1111111-1111-1111-1111-111111111111"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo X Egg Completo", 0.20m },
-                    { new Guid("d2222222-2222-2222-2222-222222222222"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo X Egg + Refri", 0.15m },
-                    { new Guid("d3333333-3333-3333-3333-333333333333"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo X Egg + Batata", 0.10m },
-                    { new Guid("d4444444-4444-4444-4444-444444444444"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo X Bacon Completo", 0.20m },
-                    { new Guid("d5555555-5555-5555-5555-555555555555"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo X Bacon + Refri", 0.15m },
-                    { new Guid("d6666666-6666-6666-6666-666666666666"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Combo X Bacon + Batata", 0.10m }
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo Completo", 0.20m },
+                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo Burger + Refri", 0.15m },
+                    { new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo Burger + Batata", 0.10m },
+                    { new Guid("d1111111-1111-1111-1111-111111111111"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo X Egg Completo", 0.20m },
+                    { new Guid("d2222222-2222-2222-2222-222222222222"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo X Egg + Refri", 0.15m },
+                    { new Guid("d3333333-3333-3333-3333-333333333333"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo X Egg + Batata", 0.10m },
+                    { new Guid("d4444444-4444-4444-4444-444444444444"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo X Bacon Completo", 0.20m },
+                    { new Guid("d5555555-5555-5555-5555-555555555555"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo X Bacon + Refri", 0.15m },
+                    { new Guid("d6666666-6666-6666-6666-666666666666"), true, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "Combo X Bacon + Batata", 0.10m }
                 });
 
             migrationBuilder.InsertData(
