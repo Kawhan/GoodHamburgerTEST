@@ -2,7 +2,7 @@
 
 API REST para gerenciamento de pedidos de uma lanchonete, com cálculo automático de descontos por combo.
 
-Desenvolvido com **.NET 10**, **Entity Framework Core**, **SQLite** e **Scalar** para documentação interativa.
+Desenvolvido com **.NET 10**, **Entity Framework Core**, **PostgreSQL** e **Scalar** para documentação interativa.
 
 ---
 
@@ -32,9 +32,10 @@ A **Good Hamburger** é uma API que permite registrar e gerenciar pedidos de uma
 
 - **.NET 10** / C# 14
 - **Entity Framework Core 10** (Code First + Migrations + Seed Data)
-- **SQLite** como banco de dados
+- **PostgreSQL** como banco de dados
 - **Scalar** para documentação OpenAPI interativa
 - **Middleware** customizado para tratamento global de exceções
+- **Docker + Docker Compose**
 
 ---
 
@@ -182,9 +183,14 @@ Antes de começar, certifique-se de ter instalado:
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - EF Core CLI (caso ainda não tenha):
+- PostgreSQL rodando localmente
 
 ```bash
 dotnet tool install --global dotnet-ef
+```
+
+```sql
+CREATE DATABASE goodhamburger;
 ```
 
 ### Rodar o projeto
@@ -221,6 +227,50 @@ Com a API rodando, acesse a documentação Scalar em:
 ```
 https://localhost:7162/scalar/v1
 ```
+
+### 🐳 Execução com Docker (RECOMENDADO)
+
+#### Pré-requisitos
+
+##### 🪟 Windows
+- Docker Desktop instalado
+- WSL2 habilitado (necessário para rodar containers Linux)
+
+> O Docker Desktop utiliza o WSL2 internamente para executar containers.
+
+##### 🐧 Linux
+- Docker instalado
+- Docker Compose instalado (ou plugin `docker compose`)
+
+---
+
+#### ▶️ Rodar a aplicação (API + PostgreSQL)
+
+```bash
+docker-compose up --build
+```
+
+
+#### 🌐 Acesso
+API: http://localhost:5000
+Documentação (Scalar): http://localhost:5000/scalar
+
+#### 🧹 Parar os containers
+```bash
+docker-compose down
+```
+
+#### 🗑️ Remover também os dados do banco
+```bash
+docker-compose down -v
+```
+
+### ℹ️ Observações
+
+- O banco PostgreSQL roda em um container separado (`db`)
+- A API se conecta usando `Host=db` (rede interna do Docker)
+- As migrations são aplicadas automaticamente na inicialização
+- Não é necessário rodar `dotnet ef` dentro do container
 
 ---
 
