@@ -100,6 +100,8 @@ namespace GoodHamburgerProject.Services
 
             await RecalculateOrder(order);
 
+            order.Active = true;
+
             var result = await SaveOrder(order);
 
             return result;
