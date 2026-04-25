@@ -458,6 +458,7 @@ Define quais produtos fazem parte de um desconto.
 ## O que ficou de fora
 
 - Criação do front-end em blazor para consumir o back-end
+- Implementação de cache utilizando redis para otimizar o desempenho da API.
 
 ## Autor
 
