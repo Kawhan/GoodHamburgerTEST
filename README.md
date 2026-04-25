@@ -329,7 +329,8 @@ O banco é populado automaticamente via **EF Core Migrations** com:
 
 | Decisão | Justificativa |
 |---------|---------------|
-| **SQLite** | Zero configuração, ideal para o escopo do desafio. Migração para SQL Server/PostgreSQL requer apenas trocar o provider no `Program.cs` |
+| **PostgreSQL** | Não exige configuração inicial complexa, sendo ideal para o escopo do desafio. A migração para outros bancos como SQL Server ou PostgreSQL pode ser feita facilmente com a troca do provider no Program.cs|
+| **Docker** | Utilizado para containerizar a aplicação e o banco de dados, garantindo um ambiente isolado, padronizado e de fácil replicação. Facilita o setup do projeto, reduz problemas de configuração local e melhora a portabilidade entre diferentes ambientes.|
 | **Seed Data via Configuration** | Dados iniciais versionados junto com as migrations, garantindo reprodutibilidade |
 | **Descontos como entidade** | Permite criar, editar e desativar combos sem alterar código-fonte |
 | **ExceptionMiddleware** | Tratamento centralizado de erros, eliminando try-catch repetitivo nos controllers |
@@ -456,7 +457,7 @@ Define quais produtos fazem parte de um desconto.
 
 ## O que ficou de fora
 
-- 
+- Criação do front-end em blazor para consumir o back-end
 
 ## Autor
 
